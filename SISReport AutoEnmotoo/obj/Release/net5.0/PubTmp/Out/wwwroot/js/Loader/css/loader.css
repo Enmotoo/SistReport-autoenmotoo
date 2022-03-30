@@ -1,0 +1,70 @@
+﻿body.loading{
+    overflow: hidden;
+}
+
+#backLoader, #showReport, body.loading #backLoader {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2500;
+    display: none;
+}
+
+#loader, body.loading #loader {
+    position: absolute;
+    width: 22vw;
+    height: 22vh;
+    background: #fff;
+    border-radius: 8px;
+}
+
+#modalReport {
+    position: absolute;
+    width: 50vw;
+    height: auto;
+    background: #fff;
+    border-radius: 8px;
+}
+
+#loadReport {
+    padding: 10px;
+    margin: auto;
+}
+
+#loadReport table {
+    overflow-y: auto;
+    border-radius: 8px;
+}
+
+#backLoader, #loader, #showReport, #modalReport, body.loading #backLoader {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#loader img, body.loading #Loader img {
+    -webkit-user-select: none;  /*Safari*/ 
+    -ms-user-select: none;  /*IE 10 and IE 11*/ 
+    user-select: none;  /*Standard syntax */
+}
+
+#loader div, body.loading #loader div{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#loader div img, body.loading #loader div img{
+    margin: auto;
+}
+
+#loader div p, body.loading #loader div p{
+    font-weight:bold;
+    margin-top: 15px;
+}
+

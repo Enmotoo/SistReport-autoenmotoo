@@ -1,0 +1,138 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link href="~/lib/DataTables/datatables.min.css" rel="stylesheet" />
+
+<link href="~/lib/Simplepicker/css/simplepicker.css" rel="stylesheet" />
+<link href="~/lib/DataTables/Select/css/select.dataTables.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables/SearchPanes/css/searchPanes.dataTables.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables/DateTime-1.1.1/css/dataTables.dateTime.css" rel="stylesheet" />
+
+<script src="~/lib/Simplepicker/js/simplepicker.js"></script>
+<script src="~/lib/DataTables/Select/js/dataTables.select.min.js"></script>
+<script src="~/lib/DataTables/SearchPanes/js/dataTables.searchPanes.min.js"></script>
+<script src="~/lib/Moment/moment.min.js"></script>
+<script src="~/lib/DataTables/DateTime-1.1.1/js/dataTables.dateTime.js"></script>
+
+<style>
+    div.dt-datetime table td.selectable button:hover {
+        background: #0198DA !important;
+    }
+
+    .btnLoad {
+        margin: 25px 0 25px 25px;
+        background-color: #0098DA;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        width: 280px;
+        border-radius: 8px;
+    }
+</style>
+
+
+<div style="margin:20px 25px;">
+    @*<button onclick="Update();" id="btnUpdate" class="btnLoad">Actualizar</button>*@
+    <a class="btn btn-success mb-3" asp-area="" asp-controller="Report" asp-action="Index">Regresar</a>
+    <h3 class="mb-3">Consolidado</h3>
+    @*Consolidado*@
+    <div style="padding: 0 25px !important; margin: 25px;">
+        <table border="0" cellspacing="5" cellpadding="5">
+            <tbody>
+                <tr>
+                    <td>Fecha de inicio:</td>
+                    <td><input type="text" id="mintwo" name="mintwo" autocomplete="off"></td>
+                </tr>
+                <tr>
+                    <td>Fecha de finalzación:</td>
+                    <td><input type="text" id="maxtwo" name="maxtwo" autocomplete="off"></td>
+                </tr>
+                <tr>
+                    <td><button id="loadConsolidate" class="btn btn-secondary buttons-copy buttons-html5" onclick="loadConsolidate();">Generar Información</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="consolidateView">
+
+    </div>
+</div>
+
+<script src="~/lib/DataTables/datatables.min.js"></script>
+<script src="~/lib/DataTables/Plug-ins/sum().js"></script>
+
+<script>
+$(document).ready(function () {
+
+    //// Create date inputs
+    minDateTwo = new DateTime($('#mintwo'), {
+        format: 'YYYY-MM-DD'
+    });
+
+    maxDateTwo = new DateTime($('#maxtwo'), {
+        format: 'YYYY-MM-DD'
+    });
+
+});
+function loadConsolidate() {
+        $.ajax({
+            url: '../GetConsolidate/' + $("#mintwo").val() + "/" + $("#maxtwo").val(),
+            type: 'GET',
+            cache: false,
+            //data: ,
+            //dataType: "json",
+            success: function (result) {
+                $("#consolidateView").html(result);
+
+                var tableTwo = $('#dtMainConsolidate').DataTable({
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    "order": [[3, "desc"]],
+                    "dom": 'BlPfrtip',
+                    layout: 'columns-1',
+                    buttons: [
+                        'copy',
+                        {
+                            extend: 'excelHtml5',
+                            title: 'Excel enmotoo consolidado',
+                            text: 'Exportar Excel'
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            title: 'CSV enmotoo consolidado',
+                            text: 'Exportar CSV'
+                        },
+                        'print'
+                    ],
+                    "drawCallback": function () {
+                        var api = this.api();
+                        $("#tpedido").html(Number.parseFloat(api.column(1, { page: "current" }).data().sum()));
+                        $("#tventas").html(Number.parseFloat(api.column(2, { page: "current" }).data().sum()).toFixed(2));
+                        $("#tcomision").html(Number.parseFloat(api.column(3, { page: "current" }).data().sum()).toFixed(2));
+                        $("#tgastosenvio").html(Number.parseFloat(api.column(4, { page: "current" }).data().sum()).toFixed(2));
+                    }
+                });
+            },
+            error: function (jqXHR, textStatus, error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function Update() {
+        $.ajax({
+            url: '../Report/Update/',
+            type: 'GET',
+            cache: false,
+            //data: ,
+            //dataType: "json",
+            success: function (result) {
+                $("#main_view").html(result);
+            },
+            error: function (jqXHR, textStatus, error) {
+                console.log(error);
+            }
+        });
+    }
+</script>

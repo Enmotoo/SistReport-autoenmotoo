@@ -1,0 +1,303 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using SISReport_AutoEnmotoo.Models.Orders;
+@model List<Order>
+    
+<link href="~/lib/Simplepicker/css/simplepicker.css" rel="stylesheet" />
+<link href="~/lib/DataTables/Select/css/select.dataTables.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables/SearchPanes/css/searchPanes.dataTables.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables/DateTime-1.1.1/css/dataTables.dateTime.css" rel="stylesheet" />
+
+<script src="~/lib/Simplepicker/js/simplepicker.js"></script>
+<script src="~/lib/DataTables/Select/js/dataTables.select.min.js"></script>
+<script src="~/lib/DataTables/SearchPanes/js/dataTables.searchPanes.min.js"></script>
+<script src="~/lib/Moment/moment.min.js"></script>
+<script src="~/lib/DataTables/DateTime-1.1.1/js/dataTables.dateTime.js"></script>
+<style>
+    .simplepicker-day-header,
+    .simplepicker-date-section,
+    .simplepicker-btn:active, .simplepicker-btn:hover,
+    .simplepicker-calender tbody .active:after, .simplepicker-calender tbody td:active:after {
+        background-color: #0098DA !important;
+    }
+
+    .simplepicker-btn {
+        border-color: #0098DA !important;
+        color: #0098DA !important;
+    }
+
+    .dataTables_length {
+        display: block !important;
+        float: left !important;
+    }
+
+    .dt-buttons {
+        float: right !important;
+    }
+
+    #dtMainData_wrapper {
+        margin-top: 25px !important;
+        margin-bottom: 50px !important;
+        padding: 0 25px !important;
+    }
+
+    #dtMainData_wrapper label input {
+        min-width: 250px;
+    }
+
+    div.dt-datetime table td.selectable.selected button {
+        background: #0098DA !important;
+    }
+
+    div.dt-datetime table td.selectable button:hover {
+        background: #0098DA !important;
+    }
+
+    #dtMainData_paginate {
+        padding-bottom: 55px !important;
+    }
+
+    .dtsp-titleRow {
+        display: none !important;
+    }
+
+    .dtsp-searchPanes {
+        max-width: 350px;
+    }
+
+    .dtsp-verticalContainer {
+        display: flex;
+    }
+
+    .contenido {
+        width: 90%;
+    }
+
+    #dtMainData {
+        width: 100%;
+    }
+
+    .dt-buttons {
+        padding-left: 15px !important;
+    }
+
+    #dtMainData_filter {
+        margin-bottom: 15px !important;
+    }
+    #dtMainDataTwo_paginate {
+        margin-bottom: 55px !important;
+    }
+</style>
+
+<div style="padding: 0 25px !important;">
+    <table border="0" cellspacing="5" cellpadding="5">
+        <tbody>
+            <tr>
+                <td>Fecha de inicio:</td>
+                <td><input type="text" id="min" name="min" autocomplete="off"></td>
+            </tr>
+            <tr>
+                <td>Fecha de finalzación:</td>
+                <td><input type="text" id="max" name="max" autocomplete="off"></td>
+            </tr>
+            <tr>
+                <td><button id="reload" class="btn btn-secondary buttons-copy buttons-html5">Recargar info</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="dtsp-verticalContainer">
+    <div class="dtsp-verticalPanes"></div>
+    <div class="contenido">
+        <table id="dtMainData" class="table table-striped">
+            <thead style="background-color: #4472C4; color: #fff !important;">
+                <tr>
+                    <th>ID</th>
+                    <th>FACTURA</th>
+                    <th>FECHA</th>
+                    <th style="display:none">HORA</th>
+                    <th class="maxw-2">NEGOCIO</th>
+                    <th style="display:none">(%)COMISION</th>
+                    <th>NOMBRE DEL CLIENTE</th>
+                    <th class="maxw-3" style="display:none">CORREO DEL CLIENTE</th>
+                    <th>MÉTODO DE PAGO</th>
+                    <th style="display:none">PAY DATA</th>
+                    <th>ESTADO</th>
+                    <th style="display:none">RANGER</th>
+                    <th style="display:none">PRODUCTOS</th>
+                    <th style="display:none">CANTIDAD DE PRODUCTOS</th>
+                    <th style="display:none">GASTOS DE ENVÍO</th>
+                    <th style="display:none">DESCUENTO</th>
+                    <th style="display:none">PROPINA</th>
+                    <th style="display:none">PROPINA (C$)</th>
+                    <th class="maxw-1">SUB TOTAL</th>
+                    <th>TOTAL</th>
+                    <th style="display: none;">COMISION</th>
+                    <th style="display: none;">ORDEN</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Order item in Model)
+                {
+                    if (item.Estado != "Terminado")
+                    {
+                        if (item.Estado != "Entrega completada por el conductor")
+                        {
+                            continue;
+                        }
+                    }
+                    <tr>
+                        <td>@Html.DisplayFor(model => item.OrderId)</td>
+                        <td>@Html.DisplayFor(model => item.Factura)</td>
+                        <td>@Html.DisplayFor(model => item.Fecha)</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.Hora)</td>
+                        <td>@Html.DisplayFor(model => item.Negocio)</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.PorcentajeComision)%</td>
+                        <td>@Html.DisplayFor(model => item.NombreCliente)</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.CorreoCliente)</td>
+                        <td>@Html.DisplayFor(model => item.MetodoPago)</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.PayData)</td>
+                        <td>@Html.DisplayFor(model => item.Estado)</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.Ranger)</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.Productos)</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.CantidadProductos)</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.GastosEnvio)</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.Descuento)</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.PorcentajePropina)%</td>
+                        <td style="display:none">@Html.DisplayFor(model => item.Propina)</td>
+                        <td>@Html.DisplayFor(model => item.Subtotal)</td>
+                        <td>@Html.DisplayFor(model => item.Total)</td>
+                        <td style="display: none;">@Html.DisplayFor(model => item.Comision)</td>
+                        <td style="display: none;">1</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style="display:none"></th>
+                    <th></th>
+                    <th style="display:none"></th>
+                    <th></th>
+                    <th style="display:none"></th>
+                    <th></th>
+                    <th style="display:none"></th>
+                    <th></th>
+                    <th style="display:none"></th>
+                    <th style="display:none"></th>
+                    <th style="display:none"></th>
+                    <th style="display:none"></th>
+                    <th style="display:none"></th>
+                    <th style="display:none"></th>
+                    <th style="display:none"></th>
+                    <th id="ftotal"></th>
+                    <th id="stotal"></th>
+                    <th style="display: none;"></th>
+                    <th style="display: none;"></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        var table = $('#dtMainData').DataTable({
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "order": [[0, "desc"]],
+            "dom": 'BlPfrtip',
+            layout: 'columns-1',
+            searchPanes: {
+                dtOpts: {
+                    dom: "tp",
+                    paging: "true",
+                    pagingType: "numbers",
+                    searching: false
+                }
+            },
+            columnDefs: [
+                {
+                    searchPanes: {
+                        show: false,
+                    },
+                    targets: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+                },
+                {
+                    searchPanes: {
+                        show: true
+                    },
+                    targets: [4]
+                }
+            ],
+            buttons: [
+                'copy',
+                {
+                    extend: 'excelHtml5',
+                    title: 'Excel enmotoo',
+                    text: 'Exportar Excel'
+                },
+                {
+                    extend: 'csvHtml5',
+                    title: 'CSV enmotoo',
+                    text: 'Exportar CSV'
+                },
+                'print'
+            ],
+            "drawCallback": function () {
+                var api = this.api();
+                $("#ftotal").html(Number.parseFloat(api.column(18, { page: "current" }).data().sum()).toFixed(2));
+                $("#stotal").html(Number.parseFloat(api.column(19, { page: "current" }).data().sum()).toFixed(2));
+            }
+        });
+
+        var minDate, maxDate;
+
+        // Custom filtering function which will search data in column four between two values
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var min = $("#min").val();
+                var max = $("#max").val();
+                var date = moment(data[2]).format("YYYY-MM-DD");
+
+                if ($("#min").val().length == 0 && $("#max").val().length == 0) return true;
+
+                if (
+                    (min === null && max === null) ||
+                    (min === null && date <= max) ||
+                    (min <= date && max === null) ||
+                    (min <= date && date <= max)
+                ) {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+        // Create date inputs
+        minDate = new DateTime($('#min'), {
+            format: 'YYYY-MM-DD'
+        });
+        maxDate = new DateTime($('#max'), {
+            format: 'YYYY-MM-DD'
+        });
+
+        // Refilter the table
+        $('#min, #max').on('change', function () {
+            table.draw();
+        });
+
+        $('#reload').on('click', function () {
+            $("#min").val("");
+            $("#max").val("");
+            table.draw();
+        });
+
+        $("div.dtsp-verticalPanes").append(table.searchPanes.container());
+    });
+
+</script>

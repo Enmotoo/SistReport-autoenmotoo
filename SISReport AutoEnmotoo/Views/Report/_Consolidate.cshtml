@@ -1,0 +1,37 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using SISReport_AutoEnmotoo.Models.Orders;
+@model List<SpGetConsolidate>
+    <table id="dtMainConsolidate" class="table table-striped mt-4" style="margin: 10px 20px;">
+        <thead style="background-color: #4472C4; color: #fff !important;">
+            <tr>
+                <th>COMERCIO</th>
+                <th># PEDIDOS</th>
+                <th>VENTAS</th>
+                <th>COMISIÓN</th>
+                <th>GASTOS ENVÍO</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (SpGetConsolidate item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(model => item.NEGOCIO)</td>
+                    <td>@Html.DisplayFor(model => item.NPEDIDO)</td>
+                    <td>@Html.DisplayFor(model => item.VENTAS)</td>
+                    <td>@Html.DisplayFor(model => item.COMISION)</td>
+                    <td>@Html.DisplayFor(model => item.GASTOSENVIO)</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th id="tpedido"></th>
+                <th id="tventas"></th>
+                <th id="tcomision"></th>
+                <th id="tgastosenvio"></th>
+            </tr>
+        </tfoot>
+    </table>
